@@ -43,4 +43,28 @@ const getAllCars = async (req,res) =>{
     }
 };
 
-module.exports = {postcardetails,getAllCars};
+const postmotorcycledetails = async (req,res)=>{
+   try{
+      let data = await postCarModel.build({
+         brand:req.body.brand,
+         year:req.body.year,
+         kmdriven:req.body.kmdriven,
+         setaprice:req.body.setaprice,
+         adtitle:req.body.adtitle,
+         description:req.body.description,
+         uploadphoto:req.body.uploadphoto,
+         state:req.body.state,
+         city:req.body.city,
+         neighbourhood:req.body.neighbourhood,
+         username:req.body.username,
+         mobilenumber:req.body.mobilenumber
+       });
+       await data.save();
+       res.send("successfully posted");
+   }catch(er)
+   {
+       res.send(er);
+   }
+}
+
+module.exports = {postcardetails,getAllCars,postmotorcycledetails};
