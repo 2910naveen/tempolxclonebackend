@@ -42,4 +42,5 @@ db.Sequelize = Sequelize;
 
 db.postCarModel = require('./postCarModel')(sequelize,Sequelize.DataTypes);
 db.motorCycleModel = require('./motorCycleModel')(sequelize,Sequelize.DataTypes);
+db.mobilePhoneModel = require('./mobilePhoneModel')(sequelize,Sequelize.DataTypes);
 module.exports = db;
