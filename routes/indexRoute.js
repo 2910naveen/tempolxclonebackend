@@ -8,6 +8,8 @@ router.post("/postmotorcycledetails",controller.postmotorcycledetails);
 router.get("/getallcars",controller.getAllCars);
 router.get("/getmotorcycledetails",controller.getmotorcycledetails);
 router.get("/getmobilephonedetails",controller.getMobilePhoneDetails);
+router.post("/postuserregisterdetails",controller.postUserRegisterDetails);
+router.put("/updatestatusofuser",controller.updateStatusOfUser);
 
 
 module.exports = router;

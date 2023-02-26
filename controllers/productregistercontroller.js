@@ -2,6 +2,8 @@ var db = require('../models');
 const postCarModel = db.postCarModel;
 const motorCycleModel = db.motorCycleModel;
 const mobilePhoneModel = db.mobilePhoneModel;
+const userModel = db.userModel;
+const nodemailer = require("nodemailer");
 
 const postcardetails = async (req,res)=>{
    console.log(req.body);
@@ -115,6 +117,67 @@ const getMobilePhoneDetails = async (req,res) =>{
      {
           res.send(err);
      }
-}
+};
 
-module.exports = {postcardetails,getAllCars,postmotorcycledetails,getmotorcycledetails,postMobilePhoneDetails,getMobilePhoneDetails};
+const postUserRegisterDetails = async (req,res) =>{
+   console.log(req.body);
+    try
+    {
+       const data = await userModel.build({
+           email:req.body.email,
+           status:"NotVerified"
+       });
+       await data.save();
+       sendEmail(req);
+       res.send("successfully saved the user");
+    }
+    catch(err)
+    {
+       res.send(err);
+    }
+} 
+
+//function to send the email
+const sendEmail = (req) => {
+   
+   //create reusable transporter object using the default SMTP transport
+   let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth:{
+         user:'naveen.segu2910@gmail.com',
+         pass:"rymupyegdefuyafa"
+      }
+   });
+
+   //send email data with unicodesymbols
+   const emailOptions = {
+      from: '"naveen.segu2910@gmail.com',      //sender email address
+      to:`${req.body.email}`,                                 //receiver email address
+      subject:'OLX Registration ONE-TIME-PASSWORD(OTP)',
+      text:`The OTP FOR LOGGING INTO OLX APP IS ${req.body.otp}`
+   };
+
+   //send mail with default transport object
+   transporter.sendMail(emailOptions,(error,info)=>{
+      if(error)
+      {
+         console.log(error);
+      }
+      console.log('Message Sent:%s',info.messageId);
+      console.log('Preview URL:%s',nodemailer.getTestMessageUrl(info));
+   });
+
+};
+
+const updateStatusOfUser = async (req,res) =>{
+    try
+    {
+       await userModel.update({ status: 'verified' },{ where:{email: req.body.email}}).then((res)=>req.send(res)).catch((err)=>res.send(err));
+    }
+    catch(err)
+    {
+       res.send(err);
+    }
+};
+
+module.exports = {postcardetails,getAllCars,postmotorcycledetails,getmotorcycledetails,postMobilePhoneDetails,getMobilePhoneDetails,postUserRegisterDetails,updateStatusOfUser};
