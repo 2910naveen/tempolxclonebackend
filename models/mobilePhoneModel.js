@@ -1,26 +1,6 @@
 module.exports = (sequelize,Sequelize)=>{
-    const postCarModel = sequelize.define("postCarModel",{
+    const mobilePhoneModel = sequelize.define("mobilePhoneModel",{
         brand:{
-            type:Sequelize.STRING,
-            allowNull:false
-        },
-        year:{
-            type:Sequelize.STRING,
-            allowNull:false
-        },
-        fuel:{
-            type:Sequelize.STRING,
-            allowNull:false
-        },
-        transmission:{
-            type:Sequelize.STRING,
-            allowNull:false
-        },
-        kmdriven:{
-            type:Sequelize.STRING,
-            allowNull:false
-        },
-        noofowners:{
             type:Sequelize.STRING,
             allowNull:false
         },
@@ -65,5 +45,5 @@ module.exports = (sequelize,Sequelize)=>{
             allowNull:false
         }
     })
-    return postCarModel;
+    return mobilePhoneModel;
 };
