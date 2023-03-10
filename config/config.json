@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "root",
-    "database": "olxapp",
+    "password": "root@123",
+    "database": "olxdata",
     "host": "localhost",
     "dialect": "mysql"
   },

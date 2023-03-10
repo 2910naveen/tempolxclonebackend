@@ -59,6 +59,10 @@ module.exports = (sequelize,Sequelize)=>{
         mobilenumber:{
             type:Sequelize.STRING,
             allowNull:false
+        },
+        email:{
+            type:Sequelize.STRING,
+            allowNull:false
         }
     })
     return postCarModel;

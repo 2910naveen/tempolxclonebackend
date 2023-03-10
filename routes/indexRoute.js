@@ -10,6 +10,9 @@ router.get("/getmotorcycledetails",controller.getmotorcycledetails);
 router.get("/getmobilephonedetails",controller.getMobilePhoneDetails);
 router.post("/postuserregisterdetails",controller.postUserRegisterDetails);
 router.put("/updatestatusofuser",controller.updateStatusOfUser);
+router.get("/findregistereduserbyemail/:email",controller.getRegisteredUserByEmail);
+router.post("/sendotpmailtoregistereduser",controller.sendOTPMailToRegisteredUser);
+router.post("/sendinterestedmailtoseller",controller.sendInterestedMailToSeller);
 
 
 module.exports = router;

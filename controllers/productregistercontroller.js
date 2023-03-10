@@ -23,7 +23,8 @@ const postcardetails = async (req,res)=>{
         city:req.body.city,
         neighbourhood:req.body.neighbourhood,
         username:req.body.username,
-        mobilenumber:req.body.mobilenumber
+        mobilenumber:req.body.mobilenumber,
+        email:req.body.email
       });
       await data.save();
       res.send("successfully posted");
@@ -61,7 +62,8 @@ const postmotorcycledetails = async (req,res)=>{
          city:req.body.city,
          neighbourhood:req.body.neighbourhood,
          username:req.body.username,
-         mobilenumber:req.body.mobilenumber
+         mobilenumber:req.body.mobilenumber,
+         email:req.body.email
        });
        await data.save();
        res.send("successfully posted");
@@ -96,7 +98,8 @@ const postMobilePhoneDetails = async (req,res)=>{
             city:req.body.city,
             neighbourhood:req.body.neighbourhood,
             username:req.body.username,
-            mobilenumber:req.body.mobilenumber
+            mobilenumber:req.body.mobilenumber,
+            email:req.body.email
          })
          await data.save();
          res.send("successfully mobilephone details posted");
@@ -180,4 +183,62 @@ const updateStatusOfUser = async (req,res) =>{
     }
 };
 
-module.exports = {postcardetails,getAllCars,postmotorcycledetails,getmotorcycledetails,postMobilePhoneDetails,getMobilePhoneDetails,postUserRegisterDetails,updateStatusOfUser};
+const getRegisteredUserByEmail = async(req,res) => {
+   console.log(req.params.email);
+   try
+   {
+        const data = await userModel.findAll({
+         where: {
+            email:req.params.email,
+            status: 'verified'
+          }
+        })
+        res.json({data});
+   }
+   catch(error)
+   {
+         res.json({error});
+   }
+   
+}
+
+const sendOTPMailToRegisteredUser = async(req,res)=>
+{
+      await sendEmail(req);
+};
+
+
+const sendInterestedMailToSeller = async (req,res)=>
+{
+   console.log(req.body);
+   //create reusable transporter object using the default SMTP transport
+   let transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth:{
+         user:`naveen.segu2910@gmail.com`,
+         pass:"rymupyegdefuyafa"
+      }
+   });
+
+   //send email data with unicodesymbols
+   const emailOptions = {
+      from:'naveen.segu2910@gmail.com',      //sender email address
+      to:`${req.body.receiver}`,                                 //receiver email address
+      subject:'OLX Product Interested',
+      text:`Message From OLX:The user with emailId ${req.body.mailer} is interested in your product.${req.body.product}` 
+   };
+
+   //send mail with default transport object
+   transporter.sendMail(emailOptions,(error,info)=>{
+      if(error)
+      {
+         console.log(error);
+      }
+      console.log('Message Sent:%s',info.messageId);
+      console.log('Preview URL:%s',nodemailer.getTestMessageUrl(info));
+   });
+
+
+}
+module.exports = {postcardetails,getAllCars,postmotorcycledetails,getmotorcycledetails,postMobilePhoneDetails,getMobilePhoneDetails,postUserRegisterDetails,updateStatusOfUser,getRegisteredUserByEmail,
+                  sendOTPMailToRegisteredUser,sendInterestedMailToSeller};
