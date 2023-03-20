@@ -141,7 +141,7 @@ const postUserRegisterDetails = async (req,res) =>{
 } 
 
 //function to send the email
-const sendEmail = (req) => {
+const sendEmail = (req,res) => {
    
    //create reusable transporter object using the default SMTP transport
    let transporter = nodemailer.createTransport({
@@ -156,8 +156,12 @@ const sendEmail = (req) => {
    const emailOptions = {
       from: '"naveen.segu2910@gmail.com',      //sender email address
       to:`${req.body.email}`,                                 //receiver email address
-      subject:'OLX Registration ONE-TIME-PASSWORD(OTP)',
-      text:`The OTP FOR LOGGING INTO OLX APP IS ${req.body.otp}`
+      subject:'IOLX Registration ONE-TIME-PASSWORD(OTP)',
+      html:`<h3>Dear IOLX user</h3>
+            <p>Thanks for registering in Incedo OnLine Exchange</p>
+            <p>The OTP FOR LOGGING INTO IOLX APP IS ${req.body.otp}</p>
+            <h3>Thanks & Regards</h3>
+            <h3>Incedo OnLine Exchange Team</h3>`
    };
 
    //send mail with default transport object
@@ -165,9 +169,11 @@ const sendEmail = (req) => {
       if(error)
       {
          console.log(error);
+         res.json({error});
       }
       console.log('Message Sent:%s',info.messageId);
       console.log('Preview URL:%s',nodemailer.getTestMessageUrl(info));
+      res.json("OTP send successfully");
    });
 
 };
@@ -197,14 +203,14 @@ const getRegisteredUserByEmail = async(req,res) => {
    }
    catch(error)
    {
-         res.json({error});
+         res.json({});
    }
    
 }
 
 const sendOTPMailToRegisteredUser = async(req,res)=>
 {
-      await sendEmail(req);
+      await sendEmail(req,res);
 };
 
 
@@ -223,9 +229,16 @@ const sendInterestedMailToSeller = async (req,res)=>
    //send email data with unicodesymbols
    const emailOptions = {
       from:'naveen.segu2910@gmail.com',      //sender email address
-      to:`${req.body.receiver}`,                                 //receiver email address
-      subject:'OLX Product Interested',
-      text:`Message From OLX:The user with emailId ${req.body.mailer} is interested in your product.${req.body.product}` 
+      to:`${req.body.product.email}`,                                 //receiver email address
+      subject:'Interested In Your IOLX Product',
+      html:`<h3>Dear ${req.body.product.username},</h3>
+            <h4>Message From IOLX:The IOLX user ${req.body.userDetails.name} is interested in purchasing your product, ${req.body.product.adtitle} , that is listed for sale on IOLX platform.
+            Also ${req.body.userDetails.name} is eager to know more about it.The following is his contact number:[${req.body.userDetails.phoneNumber}].</h4>
+            <p><span style={font-size:20px,font-weight:bolder}>Name of Person:</span>${req.body.userDetails.name}</p>
+            <p><span style={font-size:20px,font-weight:bolder}>Phone Number:</span>${req.body.userDetails.phoneNumber}</p>
+            <p><span style={font-size:20px,font-weight:bolder}>Description:</span>${req.body.userDetails.description}</p>
+            <h3>Thanks&Regards</h3>
+            <h3>Incedo OnLine Exchange Team</h3>`
    };
 
    //send mail with default transport object
@@ -238,7 +251,7 @@ const sendInterestedMailToSeller = async (req,res)=>
       console.log('Preview URL:%s',nodemailer.getTestMessageUrl(info));
    });
 
-
+    res.json("successfully sent mail to Seller");
 }
 module.exports = {postcardetails,getAllCars,postmotorcycledetails,getmotorcycledetails,postMobilePhoneDetails,getMobilePhoneDetails,postUserRegisterDetails,updateStatusOfUser,getRegisteredUserByEmail,
                   sendOTPMailToRegisteredUser,sendInterestedMailToSeller};
